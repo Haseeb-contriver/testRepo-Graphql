@@ -28,7 +28,7 @@ db.on("open", () => {
 });
 
 db.on("error", (err) => {
-  console.log("DB  not connected successfully", err);
+  console.log("DB not connected", err);
 });
 
 app.use(
