@@ -60,6 +60,5 @@ const ApolloServerAsync = async () => {
     //   },
   });
   await server.start();
-  
   server.applyMiddleware({ app });
 };
