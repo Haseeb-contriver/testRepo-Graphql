@@ -24,8 +24,8 @@ module.exports = {
     name: envVars.MONGODB_NAME,
     options: {
       // useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
     },
     port: envVars.PORT,
   },
