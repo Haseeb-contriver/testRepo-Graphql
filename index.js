@@ -10,7 +10,7 @@ const {
 } = require("apollo-server-express");
 
 const schema = require("./endpoints/index");
-const config = require("./config/config");
+const config = require("./config/config.js");
 const port = config.port || 4000;
 
 const app = express();
