@@ -3,17 +3,15 @@ const cors = require("cors");
 const db = require("./db/index.js");
 
 const { InMemoryLRUCache } = require("@apollo/utils.keyvaluecache");
-const {
-  ApolloServer,
-  gql,
-  AuthenticationError,
-} = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 
 const schema = require("./endpoints/index");
 const config = require("./config/config.js");
 const port = config.port || 4000;
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.sendStatus(200);
@@ -21,23 +19,17 @@ app.get("/", (req, res) => {
 
 db.on("open", () => {
   console.log("DB connected successfully");
-  ApolloServerAsync();
-  app.listen(port, () => {
-    console.log(`Server is running at http:://localhost:${port}/graphql`);
-  });
+  // ApolloServerAsync();
+  // app.listen(port, () => {
+  //   console.log(`Server is running at http://localhost:${port}/graphql`);
+  // });
 });
 
 db.on("error", (err) => {
   console.log("DB not connected", err);
 });
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-
-const ApolloServerAsync = async () => {
+async function ApolloServerAsync() {
   const server = new ApolloServer({
     typeDefs: schema.typeDefs,
     resolvers: schema.resolvers,
@@ -61,4 +53,9 @@ const ApolloServerAsync = async () => {
   });
   await server.start();
   server.applyMiddleware({ app });
-};
+}
+
+ApolloServerAsync();
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}/graphql`);
+});
