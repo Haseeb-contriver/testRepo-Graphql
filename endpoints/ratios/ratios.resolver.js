@@ -1,3 +1,4 @@
+const { any } = require("joi");
 const Cities = require("../../db/models/cities.model");
 const RatiosModel = require("../../db/models/ratios.model");
 
@@ -56,6 +57,34 @@ const ratiosResolver = {
         throw error;
       }
     },
+
+    getFilteredRatios: async (parent, { state, county, years }, context) => {
+      console.log("state", state);
+      console.log("cities", county);
+      console.log("years", years);
+    
+      try {
+        const ratios = await RatiosModel.find({
+          "ratiosData.state": state,
+          "ratiosData.city": { $in: county },
+          $or: years.map((year) => ({
+            "ratiosData.dateOfAuditReport": {
+              $regex: new RegExp(`${year}$`),
+            },
+          })),
+        });
+        console.log("ratios", ratios);
+    
+        if (ratios && ratios.length > 0) {
+          return ratios;
+        } else {
+          throw new Error("No records found");
+        }
+      } catch (error) {
+        console.log("Error while getting ratios record from DB:", error);
+        throw error;
+      }
+    }  
   },
 };
 
