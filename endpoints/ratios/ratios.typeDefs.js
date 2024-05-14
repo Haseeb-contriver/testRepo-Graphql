@@ -8,12 +8,8 @@ type RatioData {
   name: String
   details: String
   ratio: String
+  source: String
 }
-
-  type RatioSet {
-    logo: String
-    ratiosData: [RatioData]
-  }
 
   type RatioSet {
     logo: String
