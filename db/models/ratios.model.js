@@ -12,6 +12,7 @@ const ratiosSchema = mongoose.Schema(
         details: String,
         ratio: Number,
         source: String,
+        sourcedoc: String,
       },
     ],
   },

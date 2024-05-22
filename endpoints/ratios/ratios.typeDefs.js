@@ -9,6 +9,7 @@ type RatioData {
   details: String
   ratio: String
   source: String
+  sourcedoc: String
 }
 
   type RatioSet {
