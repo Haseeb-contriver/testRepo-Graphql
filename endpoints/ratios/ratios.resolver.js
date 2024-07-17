@@ -1,4 +1,6 @@
+const { any } = require("joi");
 const Cities = require("../../db/models/cities.model");
+const RatiosModel = require("../../db/models/ratios.model");
 
 const ratiosResolver = {
   Query: {
@@ -17,6 +19,72 @@ const ratiosResolver = {
         throw error;
       }
     },
+
+    getRatios: async (parent, { cities }, context) => {
+      console.log("cities", cities);
+
+      try {
+        const ratios = await RatiosModel.find({
+          "ratiosData.city": { $in: cities },
+        });
+        console.log("ratios", ratios);
+
+        let ratiosData = [];
+
+        // if (ratios) {  
+        //   for (let i = 0; i < ratios.length; i++) {
+        //     ratiosData.push({
+        //       state: ratios[i].ratiosData.state,
+        //       city: ratios[i].ratiosData.city,
+        //       dateOfAuditReport: ratios[i].ratiosData.dateOfAuditReport,
+        //       name: ratios[i].ratiosData.name,
+        //       details: ratios[i].ratiosData.details,
+        //       ratio: `${Math.floor(ratios[i].ratiosData.ratio * 100)}%`,
+        //       category: ratios[i].ratiosData.category,
+        //     });
+        //   }
+        // } else {
+        //   throw new Error("No records found");
+        // }
+
+        if (ratios) {
+          return ratios;
+        } else {
+          throw new Error("No records found");
+        }
+      } catch (error) {
+        console.log("Error while getting ratios record from DB:", error);
+        throw error;
+      }
+    },
+
+    getFilteredRatios: async (parent, { state, county, years }, context) => {
+      console.log("state", state);
+      console.log("cities", county);
+      console.log("years", years);
+    
+      try {
+        const ratios = await RatiosModel.find({
+          "ratiosData.state": state,
+          "ratiosData.city": { $in: county },
+          $or: years.map((year) => ({
+            "ratiosData.dateOfAuditReport": {
+              $regex: new RegExp(`${year}$`),
+            },
+          })),
+        });
+        console.log("ratios", ratios);
+    
+        if (ratios && ratios.length > 0) {
+          return ratios;
+        } else {
+          throw new Error("No records found");
+        }
+      } catch (error) {
+        console.log("Error while getting ratios record from DB:", error);
+        throw error;
+      }
+    }  
   },
 };
 

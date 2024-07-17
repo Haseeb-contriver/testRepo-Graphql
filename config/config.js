@@ -27,6 +27,6 @@ module.exports = {
       // useNewUrlParser: true,
       // useUnifiedTopology: true,
     },
-    port: envVars.PORT,
   },
+  port: envVars.PORT,
 };
