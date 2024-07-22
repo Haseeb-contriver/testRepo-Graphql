@@ -31,6 +31,8 @@ type RatioData {
     getRatios(cities: [String]!): [RatioSet]
     getBoth: [Both]
     getFilteredRatios(state: String, county: [String]!, years: [Int!]): [RatioSet]
+    getCounties(state: String!): [String]
+    getCountyYear(county: String!): [String]
   }
 `;
 

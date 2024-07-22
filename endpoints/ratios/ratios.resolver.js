@@ -31,7 +31,7 @@ const ratiosResolver = {
 
         let ratiosData = [];
 
-        // if (ratios) {  
+        // if (ratios) {
         //   for (let i = 0; i < ratios.length; i++) {
         //     ratiosData.push({
         //       state: ratios[i].ratiosData.state,
@@ -62,7 +62,7 @@ const ratiosResolver = {
       console.log("state", state);
       console.log("cities", county);
       console.log("years", years);
-    
+
       try {
         const ratios = await RatiosModel.find({
           "ratiosData.state": state,
@@ -74,7 +74,7 @@ const ratiosResolver = {
           })),
         });
         console.log("ratios", ratios);
-    
+
         if (ratios && ratios.length > 0) {
           return ratios;
         } else {
@@ -84,7 +84,45 @@ const ratiosResolver = {
         console.log("Error while getting ratios record from DB:", error);
         throw error;
       }
-    }  
+    },
+
+    getCounties: async (parents, { state }, context) => {
+      try {
+        const data = {
+          Virginia: ["Alexandria", "Fairfax"],
+          Michigan: ["Flint", "Wayne"],
+          California: ["Palo Alto", "Sacramento"],
+          Florida: ["Miami-Dade"],
+          Ohio: ["Columbus"],
+          Utah: ["Utah", "Salt Lake"],
+        };
+
+        return data[state] || [];
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    getCountyYear: async (parents, { county }, context) => {
+      try {
+        const year = {
+          Alexandria: ["2019", "2020", "2021"],
+          Fairfax: ["2019", "2020", "2021"],
+          Flint: ["2019", "2020", "2021"],
+          Wayne: ["2019", "2020"],
+          "Palo Alto": ["2019", "2020", "2021"],
+          Sacramento: ["2019", "2020", "2021"],
+          "Miami-Dade": ["2019", "2020", "2021"],
+          Columbus: ["2019", "2020", "2021"],
+          Utah: ["2019", "2020", "2021"],
+          "Salt Lake": ["2019", "2020", "2021"],
+        };
+
+        return year[county] || [];
+      } catch (error) {
+        throw error;
+      }
+    },
   },
 };
 
