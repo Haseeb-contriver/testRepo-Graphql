@@ -1,6 +1,7 @@
 const { any } = require("joi");
 const Cities = require("../../db/models/cities.model");
 const RatiosModel = require("../../db/models/ratios.model");
+const DataModel = require("../../db/models/stateDetail.model");
 
 const ratiosResolver = {
   Query: {
@@ -97,6 +98,11 @@ const ratiosResolver = {
           Utah: ["Utah", "Salt Lake"],
         };
 
+        //   const data = {
+        //     "Virginia":[{Alexandria:[2019,2020,2021]},{Fairfax:[2019,2021]},{thirdCounty:[2019]}],
+        //     // "florida":[{fairfax:[2019,2020,2021]},{alexendia:[2019,2021]},{thirdCounty:[2019]}]
+        // }
+
         return data[state] || [];
       } catch (error) {
         throw error;
@@ -122,6 +128,28 @@ const ratiosResolver = {
       } catch (error) {
         throw error;
       }
+    },
+
+    getStates: async () => {
+      try {
+        // Fetch all states from the database
+        return await DataModel.find();
+      } catch (error) {
+        console.error("Error fetching states:", error);
+        throw new Error("Unable to fetch states");
+      }
+    },
+  },
+
+  Mutation: {
+    createState: async (_, { state, counties }) => {
+      const existingState = await DataModel.findOne({ state });
+      if (existingState) {
+        throw new Error("State already exists");
+      }
+      const newState = new DataModel({ state, counties });
+      await newState.save();
+      return newState;
     },
   },
 };

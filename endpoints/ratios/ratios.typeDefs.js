@@ -26,13 +26,34 @@ type RatioData {
     state: String
   }
 
+   type County {
+    name: String!
+    years: [Int!]!
+  }
+
+  type State {
+    id: ID!
+    state: String!
+    counties: [County!]!
+  }
+
+  input CountyInput {
+    name: String!
+    years: [Int!]!
+  }
+
   type Query {
     getCities: [Cities]
     getRatios(cities: [String]!): [RatioSet]
     getBoth: [Both]
+    getStates: [State]
     getFilteredRatios(state: String, county: [String]!, years: [Int!]): [RatioSet]
     getCounties(state: String!): [String]
     getCountyYear(county: String!): [String]
+  }
+
+   type Mutation {
+    createState(state: String!, counties: [CountyInput]!): State
   }
 `;
 
