@@ -54,6 +54,8 @@ type RatioData {
 
    type Mutation {
     createState(state: String!, counties: [CountyInput]!): State
+    updateCounty(state: String!, countyId: String!, countyData: CountyInput!): State
+    deleteState(id: ID!): String
   }
 `;
 

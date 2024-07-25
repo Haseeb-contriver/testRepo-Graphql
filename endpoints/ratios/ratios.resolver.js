@@ -2,6 +2,7 @@ const { any } = require("joi");
 const Cities = require("../../db/models/cities.model");
 const RatiosModel = require("../../db/models/ratios.model");
 const DataModel = require("../../db/models/stateDetail.model");
+const mongoose = require("mongoose");
 
 const ratiosResolver = {
   Query: {
@@ -150,6 +151,27 @@ const ratiosResolver = {
       const newState = new DataModel({ state, counties });
       await newState.save();
       return newState;
+    },
+
+    updateCounty: async (_, { state, countyId, countyData }) => {
+      const objectId = new mongoose.Types.ObjectId(countyId);
+      const updatedState = await DataModel.findOneAndUpdate(
+        { state, "counties._id": objectId },
+        { $set: { "counties.$": countyData } },
+        { new: true }
+      );
+      return updatedState;
+    },
+    
+
+    deleteState: async (_, { id }) => {
+      const objectId = new mongoose.Types.ObjectId(id);
+      const result = await DataModel.findOneAndDelete({ _id: objectId });
+      if (result) {
+        return "State deleted successfully";
+      } else {
+        return "State not found";
+      }
     },
   },
 };
