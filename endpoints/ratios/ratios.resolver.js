@@ -153,13 +153,31 @@ const ratiosResolver = {
       return newState;
     },
 
-    updateCounty: async (_, { state, countyId, countyData }) => {
+    // updateCounty: async (_, { state, countyId, countyData }) => {
+    //   const objectId = new mongoose.Types.ObjectId(countyId);
+    //   const updatedState = await DataModel.findOneAndUpdate(
+    //     { state, "counties._id": objectId },
+    //     { $set: { "counties.$": countyData } },
+    //     { new: true }
+    //   );
+    //   return updatedState;
+    // },
+
+    updateCounty: async (_, { state, countyId, countyData, newState }) => {
       const objectId = new mongoose.Types.ObjectId(countyId);
+
+      // Find the document by state and county _id and update the county details
       const updatedState = await DataModel.findOneAndUpdate(
         { state, "counties._id": objectId },
-        { $set: { "counties.$": countyData } },
+        {
+          $set: {
+            "counties.$": { ...countyData, _id: objectId },
+            ...(newState && { state: newState })
+          }
+        },
         { new: true }
       );
+
       return updatedState;
     },
     

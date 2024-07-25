@@ -54,9 +54,10 @@ type RatioData {
 
    type Mutation {
     createState(state: String!, counties: [CountyInput]!): State
-    updateCounty(state: String!, countyId: String!, countyData: CountyInput!): State
+    updateCounty(state: String!, countyId: String!, countyData: CountyInput!, newState: String): State
     deleteState(id: ID!): String
   }
 `;
 
 module.exports = { ratiosTypeDefs };
+// updateCounty(state: String!, countyId: String!, countyData: CountyInput!): State
