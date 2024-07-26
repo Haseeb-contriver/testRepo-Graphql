@@ -171,33 +171,48 @@ const ratiosResolver = {
     //   return updatedState;
     // },
 
-    updateCounties: async (_, { state, counties, newState }) => {
-      const stateDoc = await DataModel.findOne({ state });
-      if (!stateDoc) {
-        throw new Error("State not found");
-      }
+    // updateCounties: async (_, { state, counties, newState }) => {
+    //   const stateDoc = await DataModel.findOne({ state });
+    //   if (!stateDoc) {
+    //     throw new Error("State not found");
+    //   }
 
-      // Update each county's data
-      counties.forEach(({ countyId, countyData }) => {
-        const countyIndex = stateDoc.counties.findIndex(
-          (county) => county._id.toString() === countyId
-        );
-        if (countyIndex >= 0) {
-          stateDoc.counties[countyIndex] = {
-            ...countyData,
-            _id: stateDoc.counties[countyIndex]._id,
-          };
+    //   // Update each county's data
+    //   counties.forEach(({ countyId, countyData }) => {
+    //     const countyIndex = stateDoc.counties.findIndex(
+    //       (county) => county._id.toString() === countyId
+    //     );
+    //     if (countyIndex >= 0) {
+    //       stateDoc.counties[countyIndex] = {
+    //         ...countyData,
+    //         _id: stateDoc.counties[countyIndex]._id,
+    //       };
+    //     }
+    //   });
+
+    //   // Update the state name if newState is provided
+    //   if (newState) {
+    //     stateDoc.state = newState;
+    //   }
+
+    //   // Save the updated document
+    //   const updatedState = await stateDoc.save();
+    //   return updatedState;
+    // },
+
+
+    updateStateData: async (_, { id, input }) => {
+      try {
+        const options = { new: true, runValidators: true };
+        const updatedDocument = await DataModel.findByIdAndUpdate(id, input, options);
+        if (!updatedDocument) {
+          throw new Error("Document not found");
         }
-      });
-
-      // Update the state name if newState is provided
-      if (newState) {
-        stateDoc.state = newState;
+        return updatedDocument;
+      } catch (error) {
+        console.error("Error updating document:", error);
+        throw new Error("Error updating document");
       }
-
-      // Save the updated document
-      const updatedState = await stateDoc.save();
-      return updatedState;
     },
 
     deleteState: async (_, { id }) => {

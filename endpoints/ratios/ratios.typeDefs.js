@@ -47,6 +47,22 @@ type RatioData {
     countyData: CountyInput!
   }
 
+  type StateData {
+    id: ID!
+    state: String!
+    counties: [County!]!
+  }
+
+  input CountyInput {
+    name: String!
+    years: [Int!]!
+  }
+
+  input StateDataInput {
+    state: String!
+    counties: [CountyInput!]!
+  }
+
   type Query {
     getCities: [Cities]
     getRatios(cities: [String]!): [RatioSet]
@@ -59,10 +75,10 @@ type RatioData {
 
    type Mutation {
     createState(state: String!, counties: [CountyInput]!): State
-    updateCounties(state: String!, counties: [CountyUpdateInput!]!, newState: String): State
+    updateStateData(id: ID!, input: StateDataInput!): StateData
     deleteState(id: ID!): String
-  }
-`;
-
+    }
+    `;
+    
+    // updateCounties(state: String!, counties: [CountyUpdateInput!]!, newState: String): State
 module.exports = { ratiosTypeDefs };
-// updateCounty(state: String!, countyId: String!, countyData: CountyInput!): State
