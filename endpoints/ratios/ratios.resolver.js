@@ -153,34 +153,52 @@ const ratiosResolver = {
       return newState;
     },
 
-    // updateCounty: async (_, { state, countyId, countyData }) => {
+    // updateCounty: async (_, { state, countyId, countyData, newState }) => {
     //   const objectId = new mongoose.Types.ObjectId(countyId);
+
+    //   // Find the document by state and county _id and update the county details
     //   const updatedState = await DataModel.findOneAndUpdate(
     //     { state, "counties._id": objectId },
-    //     { $set: { "counties.$": countyData } },
+    //     {
+    //       $set: {
+    //         "counties.$": { ...countyData, _id: objectId },
+    //         ...(newState && { state: newState })
+    //       }
+    //     },
     //     { new: true }
     //   );
+
     //   return updatedState;
     // },
 
-    updateCounty: async (_, { state, countyId, countyData, newState }) => {
-      const objectId = new mongoose.Types.ObjectId(countyId);
+    updateCounties: async (_, { state, counties, newState }) => {
+      const stateDoc = await DataModel.findOne({ state });
+      if (!stateDoc) {
+        throw new Error("State not found");
+      }
 
-      // Find the document by state and county _id and update the county details
-      const updatedState = await DataModel.findOneAndUpdate(
-        { state, "counties._id": objectId },
-        {
-          $set: {
-            "counties.$": { ...countyData, _id: objectId },
-            ...(newState && { state: newState })
-          }
-        },
-        { new: true }
-      );
+      // Update each county's data
+      counties.forEach(({ countyId, countyData }) => {
+        const countyIndex = stateDoc.counties.findIndex(
+          (county) => county._id.toString() === countyId
+        );
+        if (countyIndex >= 0) {
+          stateDoc.counties[countyIndex] = {
+            ...countyData,
+            _id: stateDoc.counties[countyIndex]._id,
+          };
+        }
+      });
 
+      // Update the state name if newState is provided
+      if (newState) {
+        stateDoc.state = newState;
+      }
+
+      // Save the updated document
+      const updatedState = await stateDoc.save();
       return updatedState;
     },
-    
 
     deleteState: async (_, { id }) => {
       const objectId = new mongoose.Types.ObjectId(id);

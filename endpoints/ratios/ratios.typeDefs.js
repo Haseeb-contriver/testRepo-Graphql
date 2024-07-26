@@ -42,6 +42,11 @@ type RatioData {
     years: [Int!]!
   }
 
+  input CountyUpdateInput {
+    countyId: ID!
+    countyData: CountyInput!
+  }
+
   type Query {
     getCities: [Cities]
     getRatios(cities: [String]!): [RatioSet]
@@ -54,7 +59,7 @@ type RatioData {
 
    type Mutation {
     createState(state: String!, counties: [CountyInput]!): State
-    updateCounty(state: String!, countyId: String!, countyData: CountyInput!, newState: String): State
+    updateCounties(state: String!, counties: [CountyUpdateInput!]!, newState: String): State
     deleteState(id: ID!): String
   }
 `;
