@@ -3,6 +3,7 @@ const {Schema} = mongoose;
 
 const countySchema = new Schema({
   name: { type: String, required: true },
+  city: { type: String, required: true},
   years: { type: [Number], required: true },
 });
 

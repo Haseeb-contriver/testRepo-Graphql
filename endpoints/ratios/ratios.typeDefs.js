@@ -28,6 +28,7 @@ type RatioData {
 
    type County {
     name: String!
+    city: String
     years: [Int!]!
   }
 
@@ -55,6 +56,7 @@ type RatioData {
 
   input CountyInput {
     name: String!
+    city: String!
     years: [Int!]!
   }
 
@@ -79,6 +81,4 @@ type RatioData {
     deleteState(id: ID!): String
     }
     `;
-    
-    // updateCounties(state: String!, counties: [CountyUpdateInput!]!, newState: String): State
 module.exports = { ratiosTypeDefs };
