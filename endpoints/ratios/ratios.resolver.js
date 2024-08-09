@@ -7,6 +7,9 @@ const mongoose = require("mongoose");
 const ratiosResolver = {
   Query: {
     getCities: async (parent, args, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("User not found");
+      }
       try {
         const cities = await Cities.find({}, { city: 1, _id: 0 });
         console.log("cities", cities);
@@ -89,6 +92,9 @@ const ratiosResolver = {
     },
 
     getCounties: async (parents, { state }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("User not found");
+      }
       try {
         const data = {
           Virginia: ["Alexandria", "Fairfax"],
@@ -131,7 +137,10 @@ const ratiosResolver = {
       }
     },
 
-    getStates: async () => {
+    getStates: async (_, {}, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("User not found");
+      }
       try {
         // Fetch all states from the database
         return await DataModel.find();
@@ -143,7 +152,10 @@ const ratiosResolver = {
   },
 
   Mutation: {
-    createState: async (_, { state, counties }) => {
+    createState: async (_, { state, counties }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("User not found");
+      }
       const existingState = await DataModel.findOne({ state });
       if (existingState) {
         throw new Error("State already exists");
@@ -200,11 +212,17 @@ const ratiosResolver = {
     //   return updatedState;
     // },
 
-
-    updateStateData: async (_, { id, input }) => {
+    updateStateData: async (_, { id, input }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("User not found");
+      }
       try {
         const options = { new: true, runValidators: true };
-        const updatedDocument = await DataModel.findByIdAndUpdate(id, input, options);
+        const updatedDocument = await DataModel.findByIdAndUpdate(
+          id,
+          input,
+          options
+        );
         if (!updatedDocument) {
           throw new Error("Document not found");
         }
@@ -215,7 +233,10 @@ const ratiosResolver = {
       }
     },
 
-    deleteState: async (_, { id }) => {
+    deleteState: async (_, { id }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("User not found");
+      }
       const objectId = new mongoose.Types.ObjectId(id);
       const result = await DataModel.findOneAndDelete({ _id: objectId });
       if (result) {

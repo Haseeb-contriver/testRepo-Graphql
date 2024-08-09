@@ -13,9 +13,9 @@ const userResolver = {
 
       // const token = await tokenService.generateVerifyEmailToken(user)
 
-      const { access, refresh } = await tokenService.generateAuthTokens(user);
+      // const { access, refresh } = await tokenService.generateAuthTokens(user);
 
-      return { user, access, refresh };
+      return user;
     },
 
     loginUser: async (parent, { email, password }, context) => {

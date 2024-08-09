@@ -27,15 +27,17 @@ const userSchema = mongoose.Schema(
         //   throw new Error("Email must be from the domain @ratioplatform.com");
         // }
 
-        const atCount = value.split('@').length - 1;
-          if (atCount !== 1) {
-            throw new Error("Email must contain exactly one @ symbol");
-          }
-          // Validate local part (before @ratioplatform.com)
-          const localPart = value.split('@')[0];
-          if (!/^[a-zA-Z0-9]+$/.test(localPart)) {
-            throw new Error("Email local part must contain only alphanumeric characters");
-          }
+        const atCount = value.split("@").length - 1;
+        if (atCount !== 1) {
+          throw new Error("Email must contain exactly one @ symbol");
+        }
+        // Validate local part (before @ratioplatform.com)
+        const localPart = value.split("@")[0];
+        if (!/^[a-zA-Z0-9]+$/.test(localPart)) {
+          throw new Error(
+            "Email local part must contain only alphanumeric characters"
+          );
+        }
       },
     },
     password: {

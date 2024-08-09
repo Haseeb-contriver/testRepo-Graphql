@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./db/index.js");
+const { userService } = require("./services");
 
 const { InMemoryLRUCache } = require("@apollo/utils.keyvaluecache");
 const { ApolloServer } = require("apollo-server-express");
@@ -35,21 +36,21 @@ async function ApolloServerAsync() {
     resolvers: schema.resolvers,
     cache: new InMemoryLRUCache(),
 
-    //   context: async ({ req }) => {
-    //     // get the user token from the headers
-    //     const token = req.headers.authorization || "";
+      context: async ({ req }) => {
+        // get the user token from the headers
+        const token = req.headers.authorization || "";
 
-    //     if (token === "") {
-    //       return;
-    //     }
+        if (token === "") {
+          return;
+        }
 
-    //     const Token = await token.replace("Bearer", "").replace(/\s/g, "");
-    //     const user = await userService.getUserByToken(Token);
+        const Token = token.replace("Bearer", "").replace(/\s/g, "");
+        const user = await userService.getUserByToken(Token);
 
-    //     if (!user) throw new AuthenticationError("User not found");
+        if (!user) throw new AuthenticationError("User not found");
 
-    //     return { user };
-    //   },
+        return { user };
+      },
   });
   await server.start();
   server.applyMiddleware({ app });

@@ -1,4 +1,7 @@
 const httpStatus = require("http-status");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+const config = require("../config/config");
 const User = require("../db/models/user.model");
 const ApiError = require("../utils/ApiError");
 
@@ -20,6 +23,14 @@ const getUserById = async (id) => {
 
 const getUserByEmail = async (email) => {
   return await User.findOne({ email });
+};
+
+const getUserByToken = async (token) => {
+  const payload = jwt.verify(token, config.jwt.secret);
+
+  // console.log('PayLoad: ', payload);
+
+  return getUserById(new mongoose.Types.ObjectId(payload.sub));
 };
 
 const updateUserById = async (userId, updateBody) => {
@@ -49,6 +60,7 @@ module.exports = {
   queryUsers,
   getUserById,
   getUserByEmail,
+  getUserByToken,
   updateUserById,
   deleteUserById,
 };
