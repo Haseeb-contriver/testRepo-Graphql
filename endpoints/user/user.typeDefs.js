@@ -15,6 +15,13 @@ const userTypeDefs = gql`
   type Mutation {
     registerUser(input: UserInput): User
     loginUser(email: String!, password: String!): UserAndTokenResponse
+    refreshToken(token: String!): Authenticated!
+  }
+
+   type Authenticated {
+    user: User!
+    accessToken: Token!
+    refreshToken: Token!
   }
 
   type UserAndTokenResponse {

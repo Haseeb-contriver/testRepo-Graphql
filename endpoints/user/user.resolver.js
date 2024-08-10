@@ -1,4 +1,5 @@
 const { userService, tokenService, authService } = require("../../services");
+const {tokenTypes} = require("../../config/token")
 
 const userResolver = {
   Query: {},
@@ -10,11 +11,6 @@ const userResolver = {
         throw new Error("Email already taken");
       }
       const user = await userService.createUser(input);
-
-      // const token = await tokenService.generateVerifyEmailToken(user)
-
-      // const { access, refresh } = await tokenService.generateAuthTokens(user);
-
       return user;
     },
 
@@ -26,6 +22,17 @@ const userResolver = {
       const { access, refresh } = await tokenService.generateAuthTokens(user);
       return {user, access, refresh };
     },
+
+    refreshToken: async(parent, {token}) => {
+      const tokenDoc = await tokenService.verifyToken(token, tokenTypes.REFRESH)
+      const user = await userService.getUserById(tokenDoc.user)
+      const newTokens = await tokenService.generateAuthTokens(user)
+      return {
+        user,
+        accessToken: newTokens.access,
+        refreshToken: newTokens.refresh
+      }
+    }
   },
 };
 
