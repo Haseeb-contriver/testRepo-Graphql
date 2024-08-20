@@ -1,5 +1,6 @@
 const { userService, tokenService, authService } = require("../../services");
-const {tokenTypes} = require("../../config/token")
+const { tokenTypes } = require("../../config/token");
+const { authController } = require("../../controller");
 
 const userResolver = {
   Query: {},
@@ -20,19 +21,32 @@ const userResolver = {
         password
       );
       const { access, refresh } = await tokenService.generateAuthTokens(user);
-      return {user, access, refresh };
+      return { user, access, refresh };
     },
 
-    refreshToken: async(parent, {token}) => {
-      const tokenDoc = await tokenService.verifyToken(token, tokenTypes.REFRESH)
-      const user = await userService.getUserById(tokenDoc.user)
-      const newTokens = await tokenService.generateAuthTokens(user)
+    refreshToken: async (parent, { token }) => {
+      const tokenDoc = await tokenService.verifyToken(
+        token,
+        tokenTypes.REFRESH
+      );
+      const user = await userService.getUserById(tokenDoc.user);
+      const newTokens = await tokenService.generateAuthTokens(user);
       return {
         user,
         accessToken: newTokens.access,
-        refreshToken: newTokens.refresh
-      }
-    }
+        refreshToken: newTokens.refresh,
+      };
+    },
+
+    forgotPassword: async (parent, { email }) => {
+      const response = await authController.forgotPassword(email);
+      return response;
+    },
+
+    resetPassword: async (parent, { token, newPassword }) => {
+      const response = await authController.resetPassword(token, newPassword);
+      return response;
+    },
   },
 };
 

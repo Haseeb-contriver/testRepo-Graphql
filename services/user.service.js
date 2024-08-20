@@ -27,9 +27,6 @@ const getUserByEmail = async (email) => {
 
 const getUserByToken = async (token) => {
   const payload = jwt.verify(token, config.jwt.secret);
-
-  // console.log('PayLoad: ', payload);
-
   return getUserById(new mongoose.Types.ObjectId(payload.sub));
 };
 

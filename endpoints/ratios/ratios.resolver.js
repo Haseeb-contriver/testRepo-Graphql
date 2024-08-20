@@ -1,5 +1,5 @@
 const { any } = require("joi");
-const { AuthenticationError } = require('apollo-server-express');
+const { AuthenticationError } = require("apollo-server-express");
 const Cities = require("../../db/models/cities.model");
 const RatiosModel = require("../../db/models/ratios.model");
 const DataModel = require("../../db/models/stateDetail.model");
@@ -13,8 +13,6 @@ const ratiosResolver = {
       }
       try {
         const cities = await Cities.find({}, { city: 1, _id: 0 });
-        console.log("cities", cities);
-
         if (cities) {
           return cities;
         } else {
@@ -27,8 +25,6 @@ const ratiosResolver = {
     },
 
     getRatios: async (parent, { cities }, context) => {
-      console.log("cities", cities);
-
       try {
         const ratios = await RatiosModel.find({
           "ratiosData.city": { $in: cities },
@@ -65,10 +61,6 @@ const ratiosResolver = {
     },
 
     getFilteredRatios: async (parent, { state, county, years }, context) => {
-      console.log("state", state);
-      console.log("cities", county);
-      console.log("years", years);
-
       try {
         const ratios = await RatiosModel.find({
           "ratiosData.state": state,
@@ -79,8 +71,6 @@ const ratiosResolver = {
             },
           })),
         });
-        console.log("ratios", ratios);
-
         if (ratios && ratios.length > 0) {
           return ratios;
         } else {
@@ -143,11 +133,9 @@ const ratiosResolver = {
         throw new AuthenticationError("User not found");
       }
       try {
-        // Fetch all states from the database
         return await DataModel.find();
       } catch (error) {
-        console.error("Error fetching states:", error);
-        throw new Error("Unable to fetch states");
+        throw new Error("Unable to fetch states", error);
       }
     },
   },
