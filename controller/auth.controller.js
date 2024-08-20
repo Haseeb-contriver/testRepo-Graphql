@@ -6,11 +6,11 @@ const { authService, tokenService, emailService } = require("../services");
 //   const tokens = await authService.refreshAuth(req.body.refreshToken);
 //   res.send({ ...tokens });
 // });
-const forgotPassword = async (email) => {
+const forgotPassword = async (email, origin) => {
   const resetPasswordToken = await tokenService.generateResetPasswordToken(
     email
   );
-  await emailService.sendResetPasswordEmail(email, resetPasswordToken);
+  await emailService.sendResetPasswordEmail(email, resetPasswordToken, origin);
   return "password reset link is sent to your email account";
 };
 

@@ -38,8 +38,8 @@ const userResolver = {
       };
     },
 
-    forgotPassword: async (parent, { email }) => {
-      const response = await authController.forgotPassword(email);
+    forgotPassword: async (parent, { email, origin }) => {
+      const response = await authController.forgotPassword(email, origin);
       return response;
     },
 
