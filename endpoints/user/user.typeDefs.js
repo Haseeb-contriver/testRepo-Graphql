@@ -17,7 +17,7 @@ const userTypeDefs = gql`
     loginUser(email: String!, password: String!): UserAndTokenResponse
     refreshToken(token: String!): Authenticated!
     forgotPassword(email: String!): String
-    resetPassword(token: String!, newPassword: String): String
+    resetPassword(token: String!, newPassword: String!): String
   }
 
    type Authenticated {
