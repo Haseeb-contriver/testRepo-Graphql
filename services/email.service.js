@@ -32,7 +32,7 @@ const sendResetPasswordEmail = async (to, token, origin) => {
         </p>
         <p style="text-align: center; margin: 20px 0;">
           <a href="${resetPasswordUrl}" style="background-color: #319795; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-size: 16px; display: inline-block;">
-            Click to Change Password
+            Reset password
           </a>
         </p>
         <p style="font-size: 14px; color: #718096;">
