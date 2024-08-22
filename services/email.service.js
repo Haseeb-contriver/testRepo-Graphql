@@ -20,7 +20,7 @@ const sendResetPasswordEmail = async (to, token, origin) => {
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Reset Your Password - Financial Ratio Platform</title>
+      <title>Reset Your Password - Financial Ratios Platform</title>
     </head>
     <body style="background-color: #f7fafc; font-family: Arial, sans-serif; padding: 20px;">
       <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -28,7 +28,7 @@ const sendResetPasswordEmail = async (to, token, origin) => {
           <h1 style="font-size: 24px; color: #319795;">Financial Ratio Platform</h1>
         </div>
         <p style="font-size: 16px; color: #2d3748;">
-          We noticed you requested a password reset for your account on Financial Ratio Platform. Use the link below to reset your password.
+          We notice that you have requested a password reset for your account on the Financial Ratios Platform.
         </p>
         <p style="text-align: center; margin: 20px 0;">
           <a href="${resetPasswordUrl}" style="background-color: #319795; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-size: 16px; display: inline-block;">
@@ -36,14 +36,13 @@ const sendResetPasswordEmail = async (to, token, origin) => {
           </a>
         </p>
         <p style="font-size: 14px; color: #718096;">
-          The link is valid for the next 10 minutes, so be sure to use it promptly.
+          Please change your password promptly.
         </p>
         <p style="font-size: 14px; color: #2d3748; margin-top: 20px;">
-          Regards,<br />The Financial Ratio Platform Team
+          Regards,<br />The Financial Ratios Platform Team
         </p>
         <div style="margin-top: 20px; border-top: 1px solid #319795; padding-top: 10px; font-size: 12px; color: #718096;">
-          <p>Financial Ratio Platform Inc.</p>
-          <p>123 Market Street, San Francisco, CA</p>
+          <p>Financial Ratios Platform Inc.</p>
         </div>
       </div>
     </body>

@@ -11,12 +11,12 @@ const forgotPassword = async (email, origin) => {
     email
   );
   await emailService.sendResetPasswordEmail(email, resetPasswordToken, origin);
-  return "password reset link is sent to your email account";
+  return "A password reset link has been sent to your email address. Please check your inbox and follow the instructions to reset your password.";
 };
 
 const resetPassword = async (token, password) => {
   await authService.resetPassword(token, password);
-  return "password reset successfully.";
+  return "Your password has been successfully reset. You can now log in with your new credentials.";
 };
 
 module.exports = {
