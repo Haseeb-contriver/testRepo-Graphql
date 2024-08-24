@@ -25,7 +25,7 @@ const sendResetPasswordEmail = async (to, token, origin) => {
     <body style="background-color: #f7fafc; font-family: Arial, sans-serif; padding: 20px;">
       <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         <div style="border-bottom: 2px solid #319795; padding-bottom: 10px; margin-bottom: 20px;">
-          <h1 style="font-size: 24px; color: #319795;">Financial Ratio Platform</h1>
+          <h1 style="font-size: 24px; color: #319795;">Financial Ratios Platform</h1>
         </div>
         <p style="font-size: 16px; color: #2d3748;">
           We notice that you have requested a password reset for your account on the Financial Ratios Platform.
