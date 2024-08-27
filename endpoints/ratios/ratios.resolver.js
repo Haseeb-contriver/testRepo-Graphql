@@ -77,8 +77,35 @@ const ratiosResolver = {
           throw new Error("No records found");
         }
       } catch (error) {
-        console.log("Error while getting ratios record from DB:", error);
+        console.log(error);
         throw error;
+      }
+    },
+
+    getRatiosForSummaryReport: async (
+      parent,
+      { years, municipality },
+      context
+    ) => {
+      try {
+        if (!context.user) {
+          throw new AuthenticationError("User not found");
+        }
+        const ratios = await RatiosModel.find({
+          "ratiosData.city": { $in: municipality },
+          $or: years.map((year) => ({
+            "ratiosData.dateOfAuditReport": {
+              $regex: new RegExp(`${year}$`),
+            },
+          })),
+        });
+        if (ratios && ratios.length > 0) {
+          return ratios;
+        } else {
+          throw new Error("No records found");
+        }
+      } catch (error) {
+        throw new Error(error);
       }
     },
 

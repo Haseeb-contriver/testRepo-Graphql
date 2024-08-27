@@ -71,6 +71,7 @@ type RatioData {
     getBoth: [Both]
     getStates: [State]
     getFilteredRatios(state: String, county: [String]!, years: [Int!]): [RatioSet]
+    getRatiosForSummaryReport( years: [Int!], municipality: [String]!): [RatioSet]
     getCounties(state: String!): [String]
     getCountyYear(county: String!): [String]
   }
