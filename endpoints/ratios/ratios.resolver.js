@@ -100,13 +100,14 @@ const ratiosResolver = {
             },
           })),
         });
+
         const formattedRatios = ratios.map((ratioItem) => ({
+          city: ratioItem.ratiosData[0].city,
           logo: ratioItem.logo,
           ratiosData: ratioItem.ratiosData
             .map((data) => data.ratio)
             .filter((_, index) => index < 6),
         }));
-
         return [formattedRatios];
       } catch (error) {
         throw new Error(error);

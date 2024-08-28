@@ -20,6 +20,7 @@ const ratiosTypeDefs = gql`
   type SummaryRatioSet {
     logo: String
     ratiosData: [String]
+    city: String  
   }
 
   type Cities {
