@@ -1,20 +1,25 @@
 const { gql } = require("apollo-server-express");
 
 const ratiosTypeDefs = gql`
-type RatioData {
-  state: String
-  city: String
-  dateOfAuditReport: String
-  name: String
-  details: String
-  ratio: String
-  source: String
-  sourcedoc: String
-}
+  type RatioData {
+    state: String
+    city: String
+    dateOfAuditReport: String
+    name: String
+    details: String
+    ratio: String
+    source: String
+    sourcedoc: String
+  }
 
   type RatioSet {
     logo: String
     ratiosData: [RatioData]
+  }
+
+  type SummaryRatioSet {
+    logo: String
+    ratiosData: [String]
   }
 
   type Cities {
@@ -71,7 +76,7 @@ type RatioData {
     getBoth: [Both]
     getStates: [State]
     getFilteredRatios(state: String, county: [String]!, years: [Int!]): [RatioSet]
-    getRatiosForSummaryReport( years: [Int!], municipality: [String]!): [RatioSet]
+    getRatiosForSummaryReport( years: [Int!], municipality: [[String!]!]): [[SummaryRatioSet]]
     getCounties(state: String!): [String]
     getCountyYear(county: String!): [String]
   }

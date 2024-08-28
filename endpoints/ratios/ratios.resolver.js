@@ -88,22 +88,26 @@ const ratiosResolver = {
       context
     ) => {
       try {
-        if (!context.user) {
-          throw new AuthenticationError("User not found");
+        if (years.length !== 1) {
+          throw new Error("only one year can be selected at a time.");
         }
+        const cities = municipality[0];
         const ratios = await RatiosModel.find({
-          "ratiosData.city": { $in: municipality },
+          "ratiosData.city": { $in: cities },
           $or: years.map((year) => ({
             "ratiosData.dateOfAuditReport": {
               $regex: new RegExp(`${year}$`),
             },
           })),
         });
-        if (ratios && ratios.length > 0) {
-          return ratios;
-        } else {
-          throw new Error("No records found");
-        }
+        const formattedRatios = ratios.map((ratioItem) => ({
+          logo: ratioItem.logo,
+          ratiosData: ratioItem.ratiosData
+            .map((data) => data.ratio)
+            .filter((_, index) => index < 6),
+        }));
+
+        return [formattedRatios];
       } catch (error) {
         throw new Error(error);
       }
