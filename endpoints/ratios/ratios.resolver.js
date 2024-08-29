@@ -88,40 +88,62 @@ const ratiosResolver = {
       context
     ) => {
       try {
-        if (years.length < 1) {
-          throw new Error("at least one year must be selected.");
+        if (years.length < 1 || municipality.length < 1) {
+          throw new Error(
+            "At least one year and one municipality list must be selected."
+          );
         }
-        const cities = municipality[0];
-        const ratios = await RatiosModel.find({
-          "ratiosData.city": { $in: cities },
-          $or: years.map((year) => ({
-            "ratiosData.dateOfAuditReport": {
-              $regex: new RegExp(`${year}$`),
-            },
-          })),
-        });
 
-        const groupedByYear = years.map((year) => {
-          return ratios
-            .filter((ratioItem) =>
-              ratioItem.ratiosData.some((data) =>
-                data.dateOfAuditReport.endsWith(`${year}`)
-              )
-            )
-            .map((ratioItem) => ({
-              date: ratioItem.ratiosData[0].dateOfAuditReport,
-              city: ratioItem.ratiosData[0].city,
-              logo: ratioItem.logo,
-              ratiosData: ratioItem.ratiosData
-                .filter((data) => data.dateOfAuditReport.endsWith(`${year}`))
-                .map((data) => data.ratio)
-                .filter((_, index) => index < 6),
-            }));
-        });
+        const length = Math.min(years.length, municipality.length);
 
-        return groupedByYear;
+        const groupedByYear = await Promise.all(
+          years.slice(0, length).map(async (year, index) => {
+            const cities = municipality[index];
+
+            const ratios = await RatiosModel.find({
+              "ratiosData.city": { $in: cities },
+              "ratiosData.dateOfAuditReport": {
+                $regex: new RegExp(`${year}$`),
+              },
+            });
+
+            // Ensure that results are returned in the order of cities in the municipality array
+            const resultsInOrder = cities.map((city) => {
+              const ratioItem = ratios.find((item) =>
+                item.ratiosData.some((data) => data.city === city)
+              );
+
+              if (ratioItem) {
+                const relevantData = ratioItem.ratiosData
+                  .filter((data) => data.dateOfAuditReport.endsWith(`${year}`))
+                  .map((data) => data.ratio)
+                  .filter((_, index) => index < 6);
+
+                return {
+                  date: ratioItem.ratiosData[0]?.dateOfAuditReport || "",
+                  city: ratioItem.ratiosData[0]?.city || "",
+                  logo: ratioItem.logo || "",
+                  ratiosData: relevantData,
+                };
+              } else {
+                // Return a placeholder or empty object if no data found for a city
+                return {
+                  date: "",
+                  city,
+                  logo: "",
+                  ratiosData: [],
+                };
+              }
+            });
+
+            return resultsInOrder;
+          })
+        );
+
+        return groupedByYear; // Return the grouped data in an array of arrays
       } catch (error) {
-        throw new Error(error);
+        console.error("Error in getRatiosForSummaryReport:", error);
+        throw new Error("An error occurred while fetching the ratios.");
       }
     },
 
