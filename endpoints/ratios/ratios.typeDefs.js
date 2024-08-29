@@ -19,20 +19,21 @@ const ratiosTypeDefs = gql`
 
   type SummaryRatioSet {
     logo: String
+    date: String
     ratiosData: [String]
-    city: String  
+    city: String
   }
 
   type Cities {
     city: String
   }
-  
+
   type Both {
     city: String
     state: String
   }
 
-   type County {
+  type County {
     name: String!
     city: String
     years: [Int!]!
@@ -76,16 +77,23 @@ const ratiosTypeDefs = gql`
     getRatios(cities: [String]!): [RatioSet]
     getBoth: [Both]
     getStates: [State]
-    getFilteredRatios(state: String, county: [String]!, years: [Int!]): [RatioSet]
-    getRatiosForSummaryReport( years: [Int!], municipality: [[String!]!]): [[SummaryRatioSet]]
+    getFilteredRatios(
+      state: String
+      county: [String]!
+      years: [Int!]
+    ): [RatioSet]
+    getRatiosForSummaryReport(
+      years: [Int!]
+      municipality: [[String!]!]
+    ): [[SummaryRatioSet]]
     getCounties(state: String!): [String]
     getCountyYear(county: String!): [String]
   }
 
-   type Mutation {
+  type Mutation {
     createState(state: String!, counties: [CountyInput]!): State
     updateStateData(id: ID!, input: StateDataInput!): StateData
     deleteState(id: ID!): String
-    }
-    `;
+  }
+`;
 module.exports = { ratiosTypeDefs };

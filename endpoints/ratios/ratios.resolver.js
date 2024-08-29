@@ -88,9 +88,6 @@ const ratiosResolver = {
       context
     ) => {
       try {
-        if (years.length !== 1) {
-          throw new Error("only one year can be selected at a time.");
-        }
         const cities = municipality[0];
         const ratios = await RatiosModel.find({
           "ratiosData.city": { $in: cities },
@@ -103,6 +100,7 @@ const ratiosResolver = {
 
         const formattedRatios = ratios.map((ratioItem) => ({
           city: ratioItem.ratiosData[0].city,
+          date: ratioItem.ratiosData[1].dateOfAuditReport,
           logo: ratioItem.logo,
           ratiosData: ratioItem.ratiosData
             .map((data) => data.ratio)
