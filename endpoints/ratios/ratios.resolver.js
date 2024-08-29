@@ -88,6 +88,9 @@ const ratiosResolver = {
       context
     ) => {
       try {
+        if (years.length < 1) {
+          throw new Error("at least one year must be selected.");
+        }
         const cities = municipality[0];
         const ratios = await RatiosModel.find({
           "ratiosData.city": { $in: cities },
@@ -98,15 +101,25 @@ const ratiosResolver = {
           })),
         });
 
-        const formattedRatios = ratios.map((ratioItem) => ({
-          city: ratioItem.ratiosData[0].city,
-          date: ratioItem.ratiosData[1].dateOfAuditReport,
-          logo: ratioItem.logo,
-          ratiosData: ratioItem.ratiosData
-            .map((data) => data.ratio)
-            .filter((_, index) => index < 6),
-        }));
-        return [formattedRatios];
+        const groupedByYear = years.map((year) => {
+          return ratios
+            .filter((ratioItem) =>
+              ratioItem.ratiosData.some((data) =>
+                data.dateOfAuditReport.endsWith(`${year}`)
+              )
+            )
+            .map((ratioItem) => ({
+              date: ratioItem.ratiosData[0].dateOfAuditReport,
+              city: ratioItem.ratiosData[0].city,
+              logo: ratioItem.logo,
+              ratiosData: ratioItem.ratiosData
+                .filter((data) => data.dateOfAuditReport.endsWith(`${year}`))
+                .map((data) => data.ratio)
+                .filter((_, index) => index < 6),
+            }));
+        });
+
+        return groupedByYear;
       } catch (error) {
         throw new Error(error);
       }
